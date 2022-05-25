@@ -1,0 +1,6 @@
+build-cmake/
+build-release/
+build-debug/
+src/.cache/
+*.swp
+.nfs*

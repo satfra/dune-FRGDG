@@ -1,0 +1,12 @@
+################################
+# Dune module information file #
+################################
+
+# Name of the module
+Module: dune-FRGDG
+Version: 1.0
+Maintainer: sattler@thphys.uni-heidelberg.de
+# Required build dependencies
+Depends: dune-common dune-geometry dune-grid dune-alugrid dune-localfunctions dune-istl dune-typetree dune-functions dune-pdelab
+# Optional build dependencies
+#Suggests:
