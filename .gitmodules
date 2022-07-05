@@ -25,6 +25,3 @@
 [submodule "dune-grid"]
 	path = dune-grid
 	url = https://gitlab.dune-project.org/core/dune-grid.git
-[submodule "dune-grid-glue"]
-	path = dune-grid-glue
-	url = https://gitlab.dune-project.org/extensions/dune-grid-glue
