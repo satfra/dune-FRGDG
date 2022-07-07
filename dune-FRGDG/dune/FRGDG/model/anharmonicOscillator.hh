@@ -91,6 +91,7 @@ namespace anharmonicOscillator
             A[0][0] = - diffusion * 0.5*(p_s[0] + p_n[0]);
 
           beta[0][0] = diffusion * (p_n[0] - p_s[0]);
+          alpha_t = std::max(alpha_t, powr<2>(diffusion));
         }
 
       template <typename E, typename X>
