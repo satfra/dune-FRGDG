@@ -25,7 +25,7 @@ namespace ON
   using utils::powr;
 
   template <typename GV>
-  class iModel : public ModelInterfaceLDGinstat<GV, 2, 1>
+    class iModel : public ModelInterfaceLDGinstat<GV, 2, 1>
   {
     protected:
       using MI = ModelInterfaceLDGinstat<GV, 2, 1>;
@@ -90,55 +90,55 @@ namespace ON
         }
 
       template <typename E, typename X>
-      std::vector<Dune::FieldMatrix<RF,m,m>> Jacobian(const E &cell, 
-          const X &x,
-          const Range0 &u) const
-      {
-        const X xg = cell.geometry().global(x);
+        std::vector<Dune::FieldMatrix<RF,m,m>> Jacobian(const E &cell, 
+            const X &x,
+            const Range0 &u) const
+        {
+          const X xg = cell.geometry().global(x);
 
-        const RF duF = f<N-1,1>(u[0]) + f<1,1>(u[0] + 2.*xg[0]*u[1]);
-        const RF dvF = f<1,1>(u[0] + 2.*xg[0]*u[1])*2.*xg[0];
-        const RF duG = u[1] * f<N-1,2>(u[0]);
-        const RF dvG = f<N-1,1>(u[0]);
+          const RF duF = f<N-1,1>(u[0]) + f<1,1>(u[0] + 2.*xg[0]*u[1]);
+          const RF dvF = f<1,1>(u[0] + 2.*xg[0]*u[1])*2.*xg[0];
+          const RF duG = u[1] * f<N-1,2>(u[0]);
+          const RF dvG = f<N-1,1>(u[0]);
 
-        std::vector<Dune::FieldMatrix<RF,m,m>> res(dim);
-        res[0][0][0] = duF;
-        res[0][0][1] = dvF;
-        res[0][1][0] = duG;
-        res[0][1][1] = dvG;
-        return res;
-      }
+          std::vector<Dune::FieldMatrix<RF,m,m>> res(dim);
+          res[0][0][0] = duF;
+          res[0][0][1] = dvF;
+          res[0][1][0] = duG;
+          res[0][1][1] = dvG;
+          return res;
+        }
 
       template <typename E, typename X, typename RF>
-      void max_eigenvalue(const E &inside, const X &x_inside,
-          const E &outside, const X &x_outside,
-          const Range0 &u_s, const Range0 &u_n,
-          const Range1 &p_s, const Range1 &p_n,
-          Dune::FieldMatrix<RF, m, dim> &alpha, RF &alpha_t) const
-      {
-        const auto Jacobian_s = Jacobian(inside, x_inside, u_s);
-        const auto Jacobian_n = Jacobian(outside, x_outside, u_n);
+        void max_eigenvalue(const E &inside, const X &x_inside,
+            const E &outside, const X &x_outside,
+            const Range0 &u_s, const Range0 &u_n,
+            const Range1 &p_s, const Range1 &p_n,
+            Dune::FieldMatrix<RF, m, dim> &alpha, RF &alpha_t) const
+        {
+          const auto Jacobian_s = Jacobian(inside, x_inside, u_s);
+          const auto Jacobian_n = Jacobian(outside, x_outside, u_n);
 
-        alpha[0][0] = std::max(std::abs(Jacobian_s[0][0][0]), std::abs(Jacobian_n[0][0][0]));
-        alpha[1][0] = std::max(std::abs(Jacobian_s[0][1][1]), std::abs(Jacobian_n[0][1][1]));
-        alpha_t = std::max(alpha[0][0], alpha[1][0]);
-      }
+          alpha[0][0] = std::max(std::abs(Jacobian_s[0][0][0]), std::abs(Jacobian_n[0][0][0]));
+          alpha[1][0] = std::max(std::abs(Jacobian_s[0][1][1]), std::abs(Jacobian_n[0][1][1]));
+          alpha_t = std::max(alpha[0][0], alpha[1][0]);
+        }
 
       //Flux function
       template <typename E, typename X, typename RF>
-      void flux(const E &e, const X &x,
-          const Range0 &u,
-          const Range1 &p,
-          Dune::FieldMatrix<RF, m, dim> &Flux) const
-      {
-        const X xg = e.geometry().global(x);
+        void flux(const E &e, const X &x,
+            const Range0 &u,
+            const Range1 &p,
+            Dune::FieldMatrix<RF, m, dim> &Flux) const
+        {
+          const X xg = e.geometry().global(x);
 
-        const RF F = f<N-1>(u[0]) + f<1>(u[0] + 2. * xg[0] *u[1]);
-        const RF G = u[1] * f<N-1,1>(u[0]);
+          const RF F = f<N-1>(u[0]) + f<1>(u[0] + 2. * xg[0] *u[1]);
+          const RF G = u[1] * f<N-1,1>(u[0]);
 
-        Flux[0][0] = F;
-        Flux[1][0] = G;
-      }
+          Flux[0][0] = F;
+          Flux[1][0] = G;
+        }
 
       template <typename E, typename X>
         void numericalDiffFlux(const E &inside, const X &x_inside,
@@ -158,7 +158,7 @@ namespace ON
               + std::sqrt(A_d())*k/(k2 + s_s));
 
           if (!utils::isEqual(s_s, s_n))
-						A[1][0] = - std::sqrt(A_d())*k * std::log((k2 + s_s)/(k2 + s_n))/(s_s - s_n) * 0.5*(p_s[0] + p_n[0]);
+            A[1][0] = - std::sqrt(A_d())*k * std::log((k2 + s_s)/(k2 + s_n))/(s_s - s_n) * 0.5*(p_s[0] + p_n[0]);
           else
             A[1][0] = - diffusion * 0.5 * (p_s[0] + p_n[0]);
           beta[1][0] = diffusion*(p_n[0] - p_s[0]);
@@ -219,9 +219,9 @@ namespace ON
           const RF s = u[0] + 2.*xg[0]*u[1];
 
           if (s > 0)
-						F[0][0] = - std::sqrt(A_d())*k * std::log(k2 + s);
-					else 
-						F[0][0] =  std::sqrt(A_d())*k * std::log(1./(k2 + s));
+            F[0][0] = - std::sqrt(A_d())*k * std::log(k2 + s);
+          else 
+            F[0][0] =  std::sqrt(A_d())*k * std::log(1./(k2 + s));
         }
 
       template <typename E, typename X>
@@ -258,9 +258,9 @@ namespace ON
           template<int order>
             using FEM = Dune::PDELab::QkDGLocalFiniteElementMap<RF, double, order, dim, Dune::PDELab::QkDGBasisPolynomial::legendre>;
           static constexpr bool DIAGONAL_FEM = true;
-					static constexpr std::array<int,4> orders {1,2,3,4};
-					
-					template<int order> 
+          static constexpr std::array<int,4> orders {1,2,3,4};
+
+          template<int order> 
             using TLOP = Dune::PDELab::DGConservationEqTemporalOperator<FEM<order>, SimSet>;
           template<unsigned idx, unsigned order, typename DATA>
             using LOP = utils::static_switch<idx, Dune::PDELab::LDGConservationEqSpatialOperator<FEM<order>, SimSet, DATA>, Dune::PDELab::LDGConservationEqSpatialOperator_stat<FEM<order>, SimSet, DATA>>;
@@ -277,7 +277,7 @@ namespace ON
           static constexpr bool linear = true;
 
           template<int order> using Scheme = LDGScheme<SimSet, order>;
-   
+
       };
   };
 }

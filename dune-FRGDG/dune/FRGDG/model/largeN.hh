@@ -25,7 +25,7 @@ namespace largeN
   using namespace ThermodynamicEquations;
 
   template <typename GV>
-  class iModel : public ModelInterfaceConEq<GV, 1>
+    class iModel : public ModelInterfaceConEq<GV, 1>
   {
     protected:
       using MI = ModelInterfaceConEq<GV, 1>;
@@ -44,7 +44,7 @@ namespace largeN
       RF T, mu;
 
       static constexpr RF nf = 2.;
-      
+
     public:
       iModel(Dune::ParameterTree ptree_)
         : MI(ptree_) 
@@ -62,36 +62,36 @@ namespace largeN
       }
 
       template <typename E, typename X>
-      Range u0(const E &e, const X &x) const
-      {
-        const X xg = e.geometry().global(x);
-        return xg[0]*l/2.;
-      }
+        Range u0(const E &e, const X &x) const
+        {
+          const X xg = e.geometry().global(x);
+          return xg[0]*l/2.;
+        }
 
       template <typename E, typename X>
-      std::vector<Dune::FieldMatrix<RF,m,m>> Jacobian(const E &cell, 
-          const X &x,
-          const Range &u) const
-      {
-        std::vector<Dune::FieldMatrix<RF,m,dim>> res(dim);
-        const RF ep = std::sqrt(u[0] + k2);
-        const RF pion  = k5/(24.*pi2) * ( dcothS(ep,T) - cothS(ep,T)/ep ) / (ep*ep);  
-        res[0][0][0] = (nf*nf)*pion;
-        return res;
-      }
+        std::vector<Dune::FieldMatrix<RF,m,m>> Jacobian(const E &cell, 
+            const X &x,
+            const Range &u) const
+        {
+          std::vector<Dune::FieldMatrix<RF,m,dim>> res(dim);
+          const RF ep = std::sqrt(u[0] + k2);
+          const RF pion  = k5/(24.*pi2) * ( dcothS(ep,T) - cothS(ep,T)/ep ) / (ep*ep);  
+          res[0][0][0] = (nf*nf)*pion;
+          return res;
+        }
 
       template <typename E, typename X, typename RF>
-      void max_eigenvalue(const E &inside, const X &x_inside,
-          const E &outside, const X &x_outside,
-          const Range &u_s, const Range &u_n,
-          Dune::FieldMatrix<RF, m, dim> &alpha, RF &alpha_t) const
-      {
-        const auto Jacobian_s = Jacobian(inside, x_inside, u_s);
-        const auto Jacobian_n = Jacobian(outside, x_outside, u_n);
+        void max_eigenvalue(const E &inside, const X &x_inside,
+            const E &outside, const X &x_outside,
+            const Range &u_s, const Range &u_n,
+            Dune::FieldMatrix<RF, m, dim> &alpha, RF &alpha_t) const
+        {
+          const auto Jacobian_s = Jacobian(inside, x_inside, u_s);
+          const auto Jacobian_n = Jacobian(outside, x_outside, u_n);
 
-        alpha[0][0] = std::max(std::abs(Jacobian_s[0][0][0]),std::abs(Jacobian_n[0][0][0]));
-        alpha_t = alpha[0][0];
-      }
+          alpha[0][0] = std::max(std::abs(Jacobian_s[0][0][0]),std::abs(Jacobian_n[0][0][0]));
+          alpha_t = alpha[0][0];
+        }
 
       RF fluxPion(const Dune::FieldVector<RF, m> &u) const
       {
@@ -101,20 +101,20 @@ namespace largeN
       }
 
       template<typename X>
-      RF fluxQuark(const X& xg) const
-      {
-        const RF eq = std::sqrt(2.*xg[0] * hs*hs + k2);
-        return k5/(3.*pi2) * (-nf) * 0.5*(tanhS(eq+mu,T) + tanhS(eq-mu,T))/eq;
-      }
+        RF fluxQuark(const X& xg) const
+        {
+          const RF eq = std::sqrt(2.*xg[0] * hs*hs + k2);
+          return k5/(3.*pi2) * (-nf) * 0.5*(tanhS(eq+mu,T) + tanhS(eq-mu,T))/eq;
+        }
 
       template <typename E, typename X, typename RF>
-      void flux(const E &e, const X &x,
-          const Range &u,
-          Dune::FieldMatrix<RF, m, dim> &F) const
-      {
-        const X xg = e.geometry().global(x);
-        F[0][0] = (nf*nf)*fluxPion(u) + 3.*fluxQuark(xg);
-      }
+        void flux(const E &e, const X &x,
+            const Range &u,
+            Dune::FieldMatrix<RF, m, dim> &F) const
+        {
+          const X xg = e.geometry().global(x);
+          F[0][0] = (nf*nf)*fluxPion(u) + 3.*fluxQuark(xg);
+        }
   };
 
   class SimSet

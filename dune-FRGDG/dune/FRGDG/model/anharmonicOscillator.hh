@@ -25,7 +25,7 @@ namespace anharmonicOscillator
   using utils::powr;
 
   template <typename GV>
-  class iModel : public ModelInterfaceLDGinstat<GV, 1, 1>
+    class iModel : public ModelInterfaceLDGinstat<GV, 1, 1>
   {
     protected:
       using MI = ModelInterfaceLDGinstat<GV, 1, 1>;
@@ -86,7 +86,7 @@ namespace anharmonicOscillator
           const RF diffusion = k * 0.5 *(1./(k2 + u_n[0]) + 1./(k2 + u_s[0]));
 
           if (!utils::isEqual(u_s[0], u_n[0]))
-						A[0][0] = - k * std::log((k2 + u_s[0]) / (k2 +u_n[0])) / (u_s[0] - u_n[0]) * 0.5 * (p_s[0]+p_n[0]);
+            A[0][0] = - k * std::log((k2 + u_s[0]) / (k2 +u_n[0])) / (u_s[0] - u_n[0]) * 0.5 * (p_s[0]+p_n[0]);
           else
             A[0][0] = - diffusion * 0.5*(p_s[0] + p_n[0]);
 
@@ -137,9 +137,9 @@ namespace anharmonicOscillator
             Dune::FieldMatrix<RF, m1, dim> &F) const
         {
           if (u[0] > 0)
-						F[0][0] = - k * std::log(k2 + u[0]);
-					else 
-						F[0][0] = k * std::log(1./(k2 + u[0]));
+            F[0][0] = - k * std::log(k2 + u[0]);
+          else 
+            F[0][0] = k * std::log(1./(k2 + u[0]));
         }
 
       template <typename E, typename X>
@@ -172,9 +172,9 @@ namespace anharmonicOscillator
           template<int order>
             using FEM = Dune::PDELab::QkDGLocalFiniteElementMap<RF, double, order, dim, Dune::PDELab::QkDGBasisPolynomial::legendre>;
           static constexpr bool DIAGONAL_FEM = true;
-					static constexpr std::array<int,4> orders {1,2,3,4};
-					
-					template<int order> 
+          static constexpr std::array<int,4> orders {1,2,3,4};
+
+          template<int order> 
             using TLOP = Dune::PDELab::DGConservationEqTemporalOperator<FEM<order>, SimSet>;
           template<unsigned idx, unsigned order, typename DATA>
             using LOP = utils::static_switch<idx, Dune::PDELab::LDGConservationEqSpatialOperator<FEM<order>, SimSet, DATA>, Dune::PDELab::LDGConservationEqSpatialOperator_stat<FEM<order>, SimSet, DATA>>;
@@ -191,7 +191,7 @@ namespace anharmonicOscillator
           static constexpr bool linear = true;
 
           template<int order> using Scheme = LDGScheme<SimSet, order>;
-   
+
       };
   };
 }
